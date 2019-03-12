@@ -1,4 +1,4 @@
-package com.tfexample.anmolgrabassignment
+package com.tfexample.newsapisample
 
 import org.junit.Test
 

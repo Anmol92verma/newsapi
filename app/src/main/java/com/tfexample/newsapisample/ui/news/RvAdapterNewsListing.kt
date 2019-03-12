@@ -1,9 +1,9 @@
-package com.tfexample.anmolgrabassignment.ui.news
+package com.tfexample.newsapisample.ui.news
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.tfexample.anmolgrabassignment.databinding.LayoutNewsItemBinding
+import com.tfexample.newsapisample.databinding.LayoutNewsItemBinding
 
 class RvAdapterNewsListing : RecyclerView.Adapter<RvAdapterNewsListing.NewsItemViewHolder>() {
   private var dataSet: MutableList<Article>? = null

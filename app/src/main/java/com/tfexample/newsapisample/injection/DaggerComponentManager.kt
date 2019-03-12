@@ -1,12 +1,12 @@
-package com.tfexample.anmolgrabassignment.injection
+package com.tfexample.newsapisample.injection
 
 import android.support.v7.app.AppCompatActivity
-import com.tfexample.anmolgrabassignment.GrabApp
-import com.tfexample.anmolgrabassignment.injection.components.ActivityComponent
-import com.tfexample.anmolgrabassignment.injection.components.ApplicationComponent
-import com.tfexample.anmolgrabassignment.injection.components.DaggerApplicationComponent
-import com.tfexample.anmolgrabassignment.injection.modules.ActivityModule
-import com.tfexample.anmolgrabassignment.injection.modules.AppModule
+import com.tfexample.newsapisample.GrabApp
+import com.tfexample.newsapisample.injection.components.ActivityComponent
+import com.tfexample.newsapisample.injection.components.ApplicationComponent
+import com.tfexample.newsapisample.injection.components.DaggerApplicationComponent
+import com.tfexample.newsapisample.injection.modules.ActivityModule
+import com.tfexample.newsapisample.injection.modules.AppModule
 
 class DaggerComponentManager {
 

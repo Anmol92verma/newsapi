@@ -7,7 +7,7 @@
   <data>
     <variable
         name="item"
-        type="com.tfexample.anmolgrabassignment.ui.news.Article"
+        type="com.tfexample.newsapisample.ui.news.Article"
         />
   </data>
 

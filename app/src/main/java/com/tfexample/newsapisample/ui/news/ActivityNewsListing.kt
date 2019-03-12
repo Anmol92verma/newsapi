@@ -1,13 +1,13 @@
-package com.tfexample.anmolgrabassignment.ui.news
+package com.tfexample.newsapisample.ui.news
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.view.View
-import com.tfexample.anmolgrabassignment.R
-import com.tfexample.anmolgrabassignment.databinding.ActivityMainBinding
-import com.tfexample.anmolgrabassignment.injection.DaggerComponentManager
-import com.tfexample.anmolgrabassignment.injection.components.ActivityComponent
-import com.tfexample.anmolgrabassignment.ui.BaseActivity
+import com.tfexample.newsapisample.R
+import com.tfexample.newsapisample.databinding.ActivityMainBinding
+import com.tfexample.newsapisample.injection.DaggerComponentManager
+import com.tfexample.newsapisample.injection.components.ActivityComponent
+import com.tfexample.newsapisample.ui.BaseActivity
 
 class ActivityNewsListing : BaseActivity<ActivityMainBinding, ActNewsViewModel>() {
 

@@ -1,12 +1,12 @@
-package com.tfexample.anmolgrabassignment.dataproviders
+package com.tfexample.newsapisample.dataproviders
 
 import android.support.v4.util.ArrayMap
-import com.tfexample.anmolgrabassignment.API_KEY_NEWS_API
-import com.tfexample.anmolgrabassignment.COUNTRY
-import com.tfexample.anmolgrabassignment.KEY_API
-import com.tfexample.anmolgrabassignment.KEY_COUNTRY
-import com.tfexample.anmolgrabassignment.networking.NewsApiService
-import com.tfexample.anmolgrabassignment.ui.news.NewsListingModel
+import com.tfexample.newsapisample.API_KEY_NEWS_API
+import com.tfexample.newsapisample.COUNTRY
+import com.tfexample.newsapisample.KEY_API
+import com.tfexample.newsapisample.KEY_COUNTRY
+import com.tfexample.newsapisample.networking.NewsApiService
+import com.tfexample.newsapisample.ui.news.NewsListingModel
 import io.reactivex.Single
 import javax.inject.Inject
 

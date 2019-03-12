@@ -1,4 +1,4 @@
-package com.tfexample.anmolgrabassignment
+package com.tfexample.newsapisample
 
 const val BASE_URL_NEWS_API = "https://newsapi.org/v2/"
 const val KEY_COUNTRY = "country"

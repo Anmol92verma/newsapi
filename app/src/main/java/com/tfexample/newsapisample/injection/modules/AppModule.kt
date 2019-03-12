@@ -1,11 +1,11 @@
-package com.tfexample.anmolgrabassignment.injection.modules
+package com.tfexample.newsapisample.injection.modules
 
 import android.app.Application
 import android.content.Context
-import com.tfexample.anmolgrabassignment.BASE_URL_NEWS_API
-import com.tfexample.anmolgrabassignment.dataproviders.NewsDataProvider
-import com.tfexample.anmolgrabassignment.injection.ApplicationContext
-import com.tfexample.anmolgrabassignment.networking.NewsApiService
+import com.tfexample.newsapisample.BASE_URL_NEWS_API
+import com.tfexample.newsapisample.dataproviders.NewsDataProvider
+import com.tfexample.newsapisample.injection.ApplicationContext
+import com.tfexample.newsapisample.networking.NewsApiService
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

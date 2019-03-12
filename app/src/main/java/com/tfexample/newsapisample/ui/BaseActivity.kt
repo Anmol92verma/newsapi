@@ -1,13 +1,13 @@
-package com.tfexample.anmolgrabassignment.ui
+package com.tfexample.newsapisample.ui
 
 import android.arch.lifecycle.ViewModel
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.tfexample.anmolgrabassignment.injection.DaggerComponentManager
-import com.tfexample.anmolgrabassignment.injection.InjectableViewModelFactory
-import com.tfexample.anmolgrabassignment.injection.components.ActivityComponent
+import com.tfexample.newsapisample.injection.DaggerComponentManager
+import com.tfexample.newsapisample.injection.InjectableViewModelFactory
+import com.tfexample.newsapisample.injection.components.ActivityComponent
 import javax.inject.Inject
 
 abstract class BaseActivity<B : ViewDataBinding, T : ViewModel> : AppCompatActivity() {

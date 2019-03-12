@@ -1,8 +1,8 @@
-package com.tfexample.anmolgrabassignment.ui.news
+package com.tfexample.newsapisample.ui.news
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.tfexample.anmolgrabassignment.dataproviders.NewsDataProvider
+import com.tfexample.newsapisample.dataproviders.NewsDataProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

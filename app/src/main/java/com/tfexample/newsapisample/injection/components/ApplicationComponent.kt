@@ -1,7 +1,7 @@
-package com.tfexample.anmolgrabassignment.injection.components
+package com.tfexample.newsapisample.injection.components
 
-import com.tfexample.anmolgrabassignment.injection.modules.ActivityModule
-import com.tfexample.anmolgrabassignment.injection.modules.AppModule
+import com.tfexample.newsapisample.injection.modules.ActivityModule
+import com.tfexample.newsapisample.injection.modules.AppModule
 import dagger.Component
 import javax.inject.Singleton
 

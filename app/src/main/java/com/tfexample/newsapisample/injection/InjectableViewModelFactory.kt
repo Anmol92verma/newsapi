@@ -1,4 +1,4 @@
-package com.tfexample.anmolgrabassignment.injection
+package com.tfexample.newsapisample.injection
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider

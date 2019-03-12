@@ -1,4 +1,4 @@
-package com.tfexample.anmolgrabassignment.ui.news
+package com.tfexample.newsapisample.ui.news
 
 import android.text.format.DateUtils
 import java.text.ParseException

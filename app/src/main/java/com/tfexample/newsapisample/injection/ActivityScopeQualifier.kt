@@ -1,4 +1,4 @@
-package com.tfexample.anmolgrabassignment.injection
+package com.tfexample.newsapisample.injection
 
 import javax.inject.Scope
 import javax.inject.Qualifier

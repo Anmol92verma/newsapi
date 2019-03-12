@@ -1,9 +1,9 @@
-package com.tfexample.anmolgrabassignment.injection.modules
+package com.tfexample.newsapisample.injection.modules
 
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
-import com.tfexample.anmolgrabassignment.injection.ActivityContext
-import com.tfexample.anmolgrabassignment.injection.ActivityScope
+import com.tfexample.newsapisample.injection.ActivityContext
+import com.tfexample.newsapisample.injection.ActivityScope
 import dagger.Module
 import dagger.Provides
 

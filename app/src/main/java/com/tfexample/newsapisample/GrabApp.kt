@@ -1,7 +1,7 @@
-package com.tfexample.anmolgrabassignment
+package com.tfexample.newsapisample
 
 import android.app.Application
-import com.tfexample.anmolgrabassignment.injection.DaggerComponentManager
+import com.tfexample.newsapisample.injection.DaggerComponentManager
 
 class GrabApp : Application() {
     override fun onCreate() {

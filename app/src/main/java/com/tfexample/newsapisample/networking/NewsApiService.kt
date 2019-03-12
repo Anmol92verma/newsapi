@@ -1,7 +1,7 @@
-package com.tfexample.anmolgrabassignment.networking
+package com.tfexample.newsapisample.networking
 
 import android.support.v4.util.ArrayMap
-import com.tfexample.anmolgrabassignment.ui.news.NewsListingModel
+import com.tfexample.newsapisample.ui.news.NewsListingModel
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.QueryMap
