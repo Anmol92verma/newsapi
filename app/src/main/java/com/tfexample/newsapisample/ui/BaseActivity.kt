@@ -19,6 +19,7 @@ abstract class BaseActivity<B : ViewDataBinding, T : ViewModel> : AppCompatActiv
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         onComponentCreated(DaggerComponentManager.getActivityComponent(this))
+        setContentView(getLayoutId())
         binding = DataBindingUtil.setContentView(this, getLayoutId())
         val classVm = getViewModelClass()
         viewModel = viewModelFactory.create(classVm)

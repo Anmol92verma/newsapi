@@ -10,7 +10,10 @@ import com.tfexample.newsapisample.ui.news.NewsListingModel
 import io.reactivex.Single
 import javax.inject.Inject
 
-class NewsDataProvider @Inject constructor(private val newsApiService: NewsApiService) {
+class NewsDataProvider @Inject constructor(
+    private val newsApiService: NewsApiService,
+    private val dataPersister: DataPersister
+) {
 
     private val queryMapNews by lazy {
         val map = ArrayMap<String, String>()
@@ -20,7 +23,11 @@ class NewsDataProvider @Inject constructor(private val newsApiService: NewsApiSe
     }
 
     fun fetchNewsListing(): Single<NewsListingModel> {
-        return newsApiService.getNewsListing(queryMapNews)
+        return newsApiService.getNewsListing(queryMapNews).flatMap { newsModel ->
+            dataPersister.persist(newsModel.articles).map { newsModel }
+        }.onErrorResumeNext {
+            dataPersister.getPersistedArticles()
+        }
     }
 
 }

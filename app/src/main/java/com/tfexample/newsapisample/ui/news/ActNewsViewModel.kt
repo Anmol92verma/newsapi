@@ -10,9 +10,7 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class ActNewsViewModel @Inject constructor(
-    private val newsApiProvider: NewsDataProvider
-) : ViewModel() {
+class ActNewsViewModel @Inject constructor(private val newsApiProvider: NewsDataProvider) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     val newsListing: MutableLiveData<List<Article>> = MutableLiveData()
@@ -27,9 +25,7 @@ class ActNewsViewModel @Inject constructor(
                 result?.articles?.let {
                     newsListing.postValue(it)
                 }
-                error?.let {
-                    it.printStackTrace()
-                }
+                error?.printStackTrace()
             }
     }
 
@@ -44,7 +40,7 @@ class ActNewsViewModel @Inject constructor(
 
 }
 
-private fun <T> Single<T>.subsIoObsMain(): Single<T> {
+fun <T> Single<T>.subsIoObsMain(): Single<T> {
     return this.subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
 }

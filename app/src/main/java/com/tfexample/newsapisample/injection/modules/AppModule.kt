@@ -3,6 +3,7 @@ package com.tfexample.newsapisample.injection.modules
 import android.app.Application
 import android.content.Context
 import com.tfexample.newsapisample.BASE_URL_NEWS_API
+import com.tfexample.newsapisample.dataproviders.DataPersister
 import com.tfexample.newsapisample.dataproviders.NewsDataProvider
 import com.tfexample.newsapisample.injection.ApplicationContext
 import com.tfexample.newsapisample.networking.NewsApiService
@@ -23,6 +24,11 @@ class AppModule(private val application: Application) {
     }
 
     @Provides
+    internal fun provideDataPersister(): DataPersister {
+        return DataPersister(application)
+    }
+
+    @Provides
     internal fun providesRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL_NEWS_API)
@@ -37,7 +43,7 @@ class AppModule(private val application: Application) {
     }
 
     @Provides
-    internal fun provideNewsDataProvider(apiService: NewsApiService): NewsDataProvider {
-        return NewsDataProvider(apiService)
+    internal fun provideNewsDataProvider(apiService: NewsApiService, dataPersister: DataPersister): NewsDataProvider {
+        return NewsDataProvider(apiService, dataPersister)
     }
 }
