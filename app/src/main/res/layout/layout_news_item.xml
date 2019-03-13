@@ -113,9 +113,10 @@
           tools:text="A Boeing 737 Max 8 crashed in Ethiopia killing everyone on board. The crash of the Ethiopian Airlines plane marks the second deadliest accident involving a Boeing 737 in the past five months. So is there a problem with this particular model? USA TODAY The Uni… [+4731 chars]"
           />
 
-      <android.support.v7.widget.AppCompatImageView
+      <com.tfexample.newsapisample.GrabImageView
           android:layout_width="match_parent"
           android:layout_height="200dp"
+          android:id="@+id/grabImageView"
           android:background="@color/colorPrimary"
           android:scaleType="centerCrop"
           android:src="@{item.urlToImage}"

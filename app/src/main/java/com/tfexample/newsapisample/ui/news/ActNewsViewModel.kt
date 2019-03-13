@@ -3,6 +3,7 @@ package com.tfexample.newsapisample.ui.news
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.tfexample.newsapisample.dataproviders.NewsDataProvider
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -41,6 +42,12 @@ class ActNewsViewModel @Inject constructor(private val newsApiProvider: NewsData
 }
 
 fun <T> Single<T>.subsIoObsMain(): Single<T> {
+    return this.subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+}
+
+
+fun <T> Observable<T>.subsIoObsMain(): Observable<T> {
     return this.subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
 }
