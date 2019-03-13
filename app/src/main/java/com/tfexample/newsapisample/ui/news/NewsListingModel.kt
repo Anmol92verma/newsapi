@@ -18,6 +18,7 @@ data class NewsListingModel(
     val totalResults: Int
 )
 
+// the fields are optionals for a reason, that room throws a non null exception
 @Entity(tableName = ARTICLES_TABLE)
 data class Article(
     @PrimaryKey(autoGenerate = true)
