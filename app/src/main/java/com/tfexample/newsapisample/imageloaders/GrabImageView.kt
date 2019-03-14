@@ -7,43 +7,44 @@ import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
 import android.util.Log
 import android.widget.ProgressBar
-import okhttp3.OkHttpClient
-import java.io.File
+import com.tfexample.newsapisample.injection.DaggerComponentManager
 import java.lang.ref.SoftReference
+import javax.inject.Inject
 
 class GrabImageView : AppCompatImageView, OnImageAvailableListener {
 
+  @Inject
+  lateinit var grabImageLoader: GrabImageLoader
   private var imageUri: Uri? = null
-  private var softReference: SoftReference<OkHttpClient>? = null
   private var progressBarReference: SoftReference<ProgressBar>? = null
 
-  constructor(context: Context?) : super(context)
-  constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-  constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs,
-      defStyleAttr)
+  constructor(context: Context?) : super(context) {
+    init()
+  }
 
+  constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+    init()
+  }
+
+  constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs,
+      defStyleAttr) {
+    init()
+  }
+
+  private fun init() {
+    DaggerComponentManager.appComponent?.inject(this)
+  }
 
   override fun setImageURI(uri: Uri?) {
     // in case recyclerview is reusing the view
     post {
       uri?.let {
-        tag = uri
-        ImageRetriever.removeListener(this.imageUri)
         this.imageUri = it
         setImageBitmap(null)
-        ImageRetriever.addListener(this, it)
-        this.imageUri?.let {
-          ImageRetriever.getEntry(uri.toString())?.let {
-            super.setImageURI(Uri.fromFile(it))
-          } ?: kotlin.run {
-            progressBarReference?.get()?.progress = 0
-            this.imageUri?.let {
-              ImageRetriever.retrieveFor(it)
-            }
-          }
-        } ?: kotlin.run {
-          Log.e("GrabImagheView", "Got null image url")
-        }
+        progressBarReference?.get()?.progress = 0
+        grabImageLoader.loadUrl(it, this,getDimens())
+      } ?: kotlin.run {
+        Log.e("GrabImagheView", "Got null image url")
       }
 
     }
@@ -52,8 +53,7 @@ class GrabImageView : AppCompatImageView, OnImageAvailableListener {
   override fun onImageProgress(forUrl: Uri, progress: Int) {
     post {
       this.imageUri?.let {
-        if (it.toString().equals(forUrl.toString()) && ImageRetriever.getEntry(
-                forUrl.toString()) == null) {
+        if (it.toString().equals(forUrl.toString())) {
           Log.d("prgresss", "$forUrl >> $progress")
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             progressBarReference?.get()?.setProgress(progress, true)
@@ -65,11 +65,12 @@ class GrabImageView : AppCompatImageView, OnImageAvailableListener {
     }
   }
 
-  override fun onImageAvailable(forUrl: Uri, bitmap: File) {
+  override fun onImageAvailable(forUrl: Uri) {
     post {
       this.imageUri?.let {
         if (it.toString() == forUrl.toString()) {
-          super.setImageURI(Uri.fromFile(bitmap))
+          val cacheFile = GrabImageLoader.getCacheFile(forUrl.toString(), context.cacheDir)
+          super.setImageURI(Uri.fromFile(cacheFile))
         }
       }
     }
@@ -77,7 +78,7 @@ class GrabImageView : AppCompatImageView, OnImageAvailableListener {
 
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-    ImageRetriever.removeFromAllqueues(this.imageUri)
+    grabImageLoader.removeRequest(this.imageUri)
   }
 
   override fun onAttachedToWindow() {
@@ -85,15 +86,6 @@ class GrabImageView : AppCompatImageView, OnImageAvailableListener {
     imageUri?.let {
       setImageURI(it)
     }
-  }
-
-  fun setHttpClient(provideOkHttpClient: OkHttpClient) {
-    this.softReference = SoftReference(provideOkHttpClient)
-  }
-
-
-  override fun getCacheDir(): File {
-    return context.cacheDir
   }
 
   override fun getDimens(): Pair<Int, Int> {
@@ -104,21 +96,14 @@ class GrabImageView : AppCompatImageView, OnImageAvailableListener {
     post {
       parse?.let {
         if (it.toString().equals(this.imageUri.toString())) {
-          val file = ImageRetriever.getCacheFile(it.toString(), getCacheDir())
-          Log.e("Cache file", "${file.length()} ${file.absolutePath}")
-          super.setImageURI(Uri.fromFile(file))
+          val file = grabImageLoader.getCacheFile(it)
+          file?.let {
+            Log.e("Cache file", "${file.length()} ${file.absolutePath}")
+            super.setImageURI(Uri.fromFile(file))
+          }
         }
       }
     }
-  }
-
-  override fun getHttpClient(): OkHttpClient? {
-    softReference?.let {
-      it.get()?.let { okHttpClient ->
-        return okHttpClient
-      }
-    }
-    return null
   }
 
   fun setProgressView(progressBar: ProgressBar) {

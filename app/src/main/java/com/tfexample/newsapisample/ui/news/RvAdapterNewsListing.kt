@@ -46,7 +46,6 @@ class RvAdapterNewsListing(
 
     fun bindUI() {
       binding.grabImageView.setProgressView(binding.progressBar)
-      binding.grabImageView.setHttpClient(activityNewsListing.provideOkHttpClient())
       binding.item = dataSet?.get(adapterPosition)
     }
   }

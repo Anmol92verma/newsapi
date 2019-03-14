@@ -5,6 +5,8 @@ import android.content.Context
 import com.tfexample.newsapisample.BASE_URL_NEWS_API
 import com.tfexample.newsapisample.dataproviders.DataPersister
 import com.tfexample.newsapisample.dataproviders.NewsDataProvider
+import com.tfexample.newsapisample.imageloaders.BufferedImageDownloader
+import com.tfexample.newsapisample.imageloaders.ImageRetriever
 import com.tfexample.newsapisample.injection.ApplicationContext
 import com.tfexample.newsapisample.networking.NewsApiService
 import dagger.Module
@@ -32,6 +34,18 @@ class AppModule(private val application: Application) {
   @Provides
   internal fun providesOkHttpClient(): OkHttpClient {
     return OkHttpClient()
+  }
+
+  @Provides
+  internal fun providesBufferedImageDownloader(
+      okHttpClient: OkHttpClient): BufferedImageDownloader {
+    return BufferedImageDownloader(okHttpClient, application)
+  }
+
+  @Provides
+  internal fun provideImageRetriever(downloader: BufferedImageDownloader): ImageRetriever {
+    return ImageRetriever(downloader)
+
   }
 
   @Provides

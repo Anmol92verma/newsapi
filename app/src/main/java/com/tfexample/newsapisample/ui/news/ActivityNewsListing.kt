@@ -13,15 +13,10 @@ import com.tfexample.newsapisample.AdapterViewListener
 import com.tfexample.newsapisample.databinding.ActivityMainBinding
 import com.tfexample.newsapisample.injection.components.ActivityComponent
 import com.tfexample.newsapisample.ui.BaseActivity
-import okhttp3.OkHttpClient
-import javax.inject.Inject
 
 class ActivityNewsListing : BaseActivity<ActivityMainBinding, ActNewsViewModel>(), AdapterViewListener {
 
   private var newsAdapter: RvAdapterNewsListing? = null
-
-  @Inject
-  lateinit var okHttpClient: OkHttpClient
 
   override fun getViewModelClass(): Class<ActNewsViewModel> {
     return ActNewsViewModel::class.java
@@ -63,10 +58,6 @@ class ActivityNewsListing : BaseActivity<ActivityMainBinding, ActNewsViewModel>(
       binding.rvNewsListing.adapter = newsAdapter
     }
     newsAdapter?.updateArticles(articles)
-  }
-
-  override fun provideOkHttpClient(): OkHttpClient {
-    return okHttpClient
   }
 
   override fun navigateTo(url: String?) {
