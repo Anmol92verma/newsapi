@@ -1,7 +1,9 @@
-package com.tfexample.newsapisample
+package com.tfexample.newsapisample.imageloaders
 
+import android.content.Context
 import android.util.Log
 import com.tfexample.newsapisample.ui.news.subsIoObsMain
+import id.zelory.compressor.Compressor
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import okhttp3.OkHttpClient
@@ -12,7 +14,12 @@ import okio.BufferedSource
 import okio.Okio
 import java.io.File
 
-fun downloadFileByOkio(url: String, destFile: File, okHttpClient: OkHttpClient): Observable<Int> {
+fun downloadFileByOkio(
+    url: String, destFile: File,
+    okHttpClient: OkHttpClient,
+    context: Context,
+    dimens: Pair<Int, Int>
+): Observable<Int> {
   return Observable.create<Int> { subscriber ->
     var sink: BufferedSink? = null
     var source: BufferedSource? = null
@@ -28,16 +35,29 @@ fun downloadFileByOkio(url: String, destFile: File, okHttpClient: OkHttpClient):
           subscriber.safeOnComplete()
         } else {
           source = body.source()
-          sink = Okio.buffer(Okio.appendingSink(destFile))
+          when {
+            destFile.length() == 0L -> {
+              sink = Okio.buffer(Okio.sink(destFile))
+            }
+            destFile.length() > 0L -> {
+              sink = Okio.buffer(Okio.appendingSink(destFile))
+            }
+          }
+
           sink?.let {
             val sinkBuffer = it.buffer()
             var totalBytesRead: Long = 0
             val bufferSize = 8 * 1024
             var bytesRead: Long = 0
-            Log.d("Already read", "$bytesRead/$contentLength")
+
             if (destFile.length() > 0) {
+              Log.d("Already read", "$bytesRead/$contentLength")
               bytesRead = destFile.length()
-              source?.skip(bytesRead)
+              try {
+                source?.skip(bytesRead)
+              } catch (ex: java.lang.Exception) {
+
+              }
             }
 
             fun readStatus(source: BufferedSource): Long {
@@ -67,6 +87,13 @@ fun downloadFileByOkio(url: String, destFile: File, okHttpClient: OkHttpClient):
     } finally {
       Util.closeQuietly(sink)
       Util.closeQuietly(source)
+      if (!gotException) {
+        ImageRetriever.putEntry(url, Compressor(context)
+            .setMaxWidth(dimens.first)
+            .setMaxHeight(dimens.second)
+            .setQuality(30)
+            .compressToFile(destFile))
+      }
     }
     if (!gotException) {
       subscriber.safeOnComplete()
