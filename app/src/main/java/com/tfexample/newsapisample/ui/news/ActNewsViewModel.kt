@@ -9,45 +9,62 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
-class ActNewsViewModel @Inject constructor(private val newsApiProvider: NewsDataProvider) : ViewModel() {
+class ActNewsViewModel : ViewModel() {
 
-    private val compositeDisposable = CompositeDisposable()
-    val newsListing: MutableLiveData<List<Article>> = MutableLiveData()
-    val progressLiveData: MutableLiveData<Boolean> = MutableLiveData()
+  private val compositeDisposable = CompositeDisposable()
+  val newsListing: MutableLiveData<List<Article>> = MutableLiveData()
+  val progressLiveData: MutableLiveData<Boolean> = MutableLiveData()
+  private lateinit var newsDataProvider: NewsDataProvider
 
-    fun getNewsListing() {
-        compositeDisposable += newsApiProvider.fetchNewsListing()
-            .doOnSubscribe { progressLiveData.postValue(true) }
-            .subsIoObsMain()
-            .subscribe { result, error ->
-                progressLiveData.postValue(false)
-                result?.articles?.let {
-                    newsListing.postValue(it)
-                }
-                error?.printStackTrace()
-            }
-    }
+  fun setNewsDataProvider(newsApiProvider: NewsDataProvider) {
+    this.newsDataProvider = newsApiProvider
+  }
 
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.let {
-            if (!it.isDisposed) {
-                it.dispose()
-            }
+  fun getNewsListing() {
+    newsDataProvider.cachedNewsListing()?.let { result ->
+      when {
+        result.articles.isEmpty() -> fetchLatestNews()
+        else -> result.articles.let {
+          newsListing.postValue(it)
         }
+      }
+    } ?: run {
+      fetchLatestNews()
     }
+  }
+
+  private fun fetchLatestNews() {
+    compositeDisposable += newsDataProvider.fetchNewsListing()
+        .doOnSubscribe { progressLiveData.postValue(true) }
+        .subsIoObsMain()
+        .subscribe { result, error ->
+          progressLiveData.postValue(false)
+          result?.articles?.let {
+            newsListing.postValue(it)
+          }
+          error?.printStackTrace()
+        }
+  }
+
+  override fun onCleared() {
+    super.onCleared()
+    compositeDisposable.let {
+      if (!it.isDisposed) {
+        it.dispose()
+      }
+    }
+  }
 
 }
 
 fun <T> Single<T>.subsIoObsMain(): Single<T> {
-    return this.subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+  return this.subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
 }
 
 
 fun <T> Observable<T>.subsIoObsMain(): Observable<T> {
-    return this.subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+  return this.subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
 }

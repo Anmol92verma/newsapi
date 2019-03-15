@@ -10,13 +10,19 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import com.tfexample.newsapisample.AdapterViewListener
+import com.tfexample.newsapisample.GridSpacingItemDecoration
+import com.tfexample.newsapisample.R
 import com.tfexample.newsapisample.databinding.ActivityMainBinding
+import com.tfexample.newsapisample.dataproviders.NewsDataProvider
 import com.tfexample.newsapisample.injection.components.ActivityComponent
 import com.tfexample.newsapisample.ui.BaseActivity
+import javax.inject.Inject
 
 class ActivityNewsListing : BaseActivity<ActivityMainBinding, ActNewsViewModel>(), AdapterViewListener {
 
   private var newsAdapter: RvAdapterNewsListing? = null
+
+  @Inject lateinit var newsApiProvider: NewsDataProvider
 
   override fun getViewModelClass(): Class<ActNewsViewModel> {
     return ActNewsViewModel::class.java
@@ -29,6 +35,7 @@ class ActivityNewsListing : BaseActivity<ActivityMainBinding, ActNewsViewModel>(
   override fun onPostCreate(savedInstanceState: Bundle?) {
     super.onPostCreate(savedInstanceState)
     listenObservers()
+    viewModel.setNewsDataProvider(newsApiProvider)
     viewModel.getNewsListing()
   }
 
@@ -54,6 +61,9 @@ class ActivityNewsListing : BaseActivity<ActivityMainBinding, ActNewsViewModel>(
     if (newsAdapter == null) {
       binding.rvNewsListing.layoutManager = StaggeredGridLayoutManager(2,
           StaggeredGridLayoutManager.VERTICAL)
+      val decoration = GridSpacingItemDecoration(2,
+          resources.getDimension(R.dimen.dimen_4dp).toInt(), true, 0)
+      binding.rvNewsListing.addItemDecoration(decoration)
       newsAdapter = RvAdapterNewsListing(this)
       binding.rvNewsListing.adapter = newsAdapter
     }
