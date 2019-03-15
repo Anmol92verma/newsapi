@@ -1,10 +1,8 @@
 package com.tfexample.newsapisample.imageloaders
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.util.Log
 import com.tfexample.newsapisample.ui.news.subsIoObsMain
-import id.zelory.compressor.Compressor
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import okhttp3.OkHttpClient
@@ -18,11 +16,11 @@ class BufferedImageDownloader(private val okHttpClient: OkHttpClient,
     private val context: Context) {
 
   fun downloadFileByOkio(
-      url: String,
-      dimens: Pair<Int, Int>?
+      url: String
   ): Observable<Int> {
     return Observable.create<Int> { subscriber ->
-      val destFile = GrabImageLoader.getCacheFile(url, context.cacheDir)
+      Log.d("BufferedImageDownloader",url)
+      val destFile = GrabImageLoader.getDownloadDir(url, context.cacheDir)
       var sink: BufferedSink? = null
       var source: BufferedSource? = null
       var gotException = false
@@ -89,8 +87,6 @@ class BufferedImageDownloader(private val okHttpClient: OkHttpClient,
       } finally {
         Util.closeQuietly(sink)
         Util.closeQuietly(source)
-        Compressor(context).setQuality(10).setCompressFormat(
-            Bitmap.CompressFormat.WEBP).compressToFile(destFile)
       }
       if (!gotException) {
         subscriber.safeOnComplete()

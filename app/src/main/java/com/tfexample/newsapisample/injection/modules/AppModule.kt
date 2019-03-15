@@ -6,7 +6,9 @@ import com.tfexample.newsapisample.BASE_URL_NEWS_API
 import com.tfexample.newsapisample.dataproviders.DataPersister
 import com.tfexample.newsapisample.dataproviders.NewsDataProvider
 import com.tfexample.newsapisample.imageloaders.BufferedImageDownloader
+import com.tfexample.newsapisample.imageloaders.GrabImageLoader
 import com.tfexample.newsapisample.imageloaders.ImageRetriever
+import com.tfexample.newsapisample.imageloaders.ImageProcessor
 import com.tfexample.newsapisample.injection.ApplicationContext
 import com.tfexample.newsapisample.networking.NewsApiService
 import dagger.Module
@@ -43,9 +45,19 @@ class AppModule(private val application: Application) {
   }
 
   @Provides
-  internal fun provideImageRetriever(downloader: BufferedImageDownloader): ImageRetriever {
-    return ImageRetriever(downloader)
+  internal fun provideImageRetriever(downloader: BufferedImageDownloader,
+      imageProcessor: ImageProcessor): ImageRetriever {
+    return ImageRetriever(downloader, imageProcessor)
+  }
 
+  @Provides
+  internal fun providesImageProvider(): ImageProcessor {
+    return ImageProcessor(application)
+  }
+
+  @Provides
+  internal fun providesGrabImageLoader(imageRetriever: ImageRetriever): GrabImageLoader {
+    return GrabImageLoader(application, imageRetriever)
   }
 
   @Provides

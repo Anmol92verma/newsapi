@@ -1,28 +1,29 @@
 package com.tfexample.newsapisample.imageloaders
 
+import android.annotation.SuppressLint
 import android.net.Uri
-import android.support.v4.util.ArrayMap
 import android.util.Log
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import java.util.concurrent.Executors
-import kotlin.collections.HashSet
 
 private const val MAX_CONCURRENT_ITEMS = 5
 
-class ImageRetriever(private val downloader: BufferedImageDownloader) {
+class ImageRetriever(private val downloader: BufferedImageDownloader,
+    private val imageProcessor: ImageProcessor) {
+
   private val priorityList = Stack<Pair<String, Disposable?>>()
   private val queuedItems = Stack<Pair<String, Disposable?>>()
 
-  val processedImageUrls = HashSet<String>()
-  val listeners = ArrayMap<String, OnImageAvailableListener>()
-  private var dimens: Pair<Int, Int>? = null
 
   fun retrieveFor(imageUri: Uri,
       dimens: Pair<Int, Int>) {
-    this.dimens = dimens
+    if (hasProcessed(imageUri)) {
+      return
+    }
+    imageProcessor.updateDimensFor(imageUri.toString(), dimens)
     if (pendingRequestsContains(imageUri)) {
       removeFromAllqueues(imageUri)
     }
@@ -41,34 +42,31 @@ class ImageRetriever(private val downloader: BufferedImageDownloader) {
     }
   }
 
+  @SuppressLint("CheckResult")
   private fun addToJobs(
       currentJobItem: Pair<String, Disposable?>) {
-    currentJobItem.let { lastItem ->
-      if (priorityList.size < MAX_CONCURRENT_ITEMS) {
-        // and move it to priority list if priorityList size < 5
-        priorityList.add(currentJobItem)
-        listeners.first()?.let { imageListener ->
-          downloader.downloadFileByOkio(lastItem.first,dimens)
-              .countedThreadScheduler(MAX_CONCURRENT_ITEMS)
-              .doOnSubscribe {
-                currentJobItem.second = it
-              }
-              .subscribe({ progress ->
-                listeners[lastItem.first]?.onImageProgress(Uri.parse(lastItem.first), progress)
-              }, {
-                it.printStackTrace()
-                Log.e("GrabIV", "errrrr for ${lastItem.first}")
-                listeners[lastItem.first]?.onImageError(Uri.parse(lastItem.first))
-              }, {
-                priorityList.remove(currentJobItem)
-                processPriorityList()
-                currentJobItem.first.let {
-                  putEntry(it)
-                }
-              })
-        }
-
-      }
+    if (priorityList.size < MAX_CONCURRENT_ITEMS) {
+      // and move it to priority list if priorityList size < 5
+      priorityList.add(currentJobItem)
+      downloader.downloadFileByOkio(currentJobItem.first)
+          .countedThreadScheduler(MAX_CONCURRENT_ITEMS)
+          .doOnSubscribe {
+            currentJobItem.second = it
+          }
+          .subscribe({ progress ->
+            imageProcessor.updateProgress(currentJobItem.first, progress)
+          }, {
+            Log.e("GrabIV", "errrrr for ${currentJobItem.first}")
+            imageProcessor.throwError(currentJobItem.first)
+          }, {
+            priorityList.remove(currentJobItem)
+            processPriorityList()
+            currentJobItem.first.let {
+              putEntry(it)
+            }
+          })
+    } else {
+      queuedItems.add(currentJobItem)
     }
   }
 
@@ -103,25 +101,18 @@ class ImageRetriever(private val downloader: BufferedImageDownloader) {
   }
 
   private fun putEntry(url: String) {
-    processedImageUrls.add(url)
-    listeners.forEach {
-      it.value.onImageAvailable(Uri.parse(url))
-    }
+    imageProcessor.notifyDownloaded(url)
   }
 
   fun removeListener(imageUri: Uri?) {
     imageUri?.let {
-      if (this.listeners.containsKey(imageUri.toString())) {
-        this.listeners.remove(imageUri.toString())
-      }
+      imageProcessor.clearListeners(imageUri.toString())
     }
   }
 
-  fun addListener(grabImageView: OnImageAvailableListener,
-      it: Uri) {
-    if (!this.listeners.containsKey(it.toString())) {
-      this.listeners[it.toString()] = grabImageView
-    }
+  fun addListener(it: Uri,
+      onImageAvailableListener: OnImageAvailableListener) {
+    imageProcessor.addListener(it.toString(), onImageAvailableListener)
   }
 
   fun canAddRequest(uri: Uri): Boolean {
@@ -129,16 +120,12 @@ class ImageRetriever(private val downloader: BufferedImageDownloader) {
   }
 
   fun hasProcessed(uri: Uri): Boolean {
-    return this.processedImageUrls.contains(uri.toString())
+    return imageProcessor.checkProcessed(uri)
   }
 
   private fun isProcessing(uri: Uri): Boolean {
     return pendingRequestsContains(uri)
   }
-}
-
-private fun <K, V> ArrayMap<K, V>.first(): V? {
-  return this[this.keys.first()]
 }
 
 data class Pair<A, B>(

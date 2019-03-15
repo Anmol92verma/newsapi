@@ -5,17 +5,31 @@ import android.net.Uri
 import android.webkit.URLUtil
 import com.tfexample.newsapisample.injection.ApplicationContext
 import java.io.File
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class GrabImageLoader @Inject constructor(@ApplicationContext val context: Context,
+class GrabImageLoader (@ApplicationContext val context: Context,
     private val imageRetriever: ImageRetriever) {
 
   companion object {
-    fun getCacheFile(forUrl: String, cacheDir: File): File {
-      val fileNameWithExtension = URLUtil.guessFileName(forUrl, null, null);
-      return File(cacheDir, fileNameWithExtension)
+    fun getDownloadDir(forUrl: String, cacheDir: File): File {
+      val fileNameWithExtension = URLUtil.guessFileName(forUrl, null, null)
+      return File(getDownloadedCached(cacheDir), fileNameWithExtension)
+    }
+
+    fun getDestinationCachedFile(forUrl:String,cacheDir: File?): File {
+      val fileNameWithExtension = URLUtil.guessFileName(forUrl, null, null)
+      return File(getDestinationCached(cacheDir), fileNameWithExtension)
+    }
+
+    fun getDestinationCached(cacheDir: File?): String? {
+      val file = File(cacheDir, "compressed")
+      file.mkdirs()
+      return file.absolutePath
+    }
+
+    private fun getDownloadedCached(cacheDir: File?): String? {
+      val file = File(cacheDir, "downloads")
+      file.mkdirs()
+      return file.absolutePath
     }
   }
 
@@ -23,7 +37,7 @@ class GrabImageLoader @Inject constructor(@ApplicationContext val context: Conte
       onImageAvailableListener: OnImageAvailableListener,
       dimens: Pair<Int, Int>) {
     if (imageRetriever.canAddRequest(uri)) {
-      imageRetriever.addListener(onImageAvailableListener, uri)
+      imageRetriever.addListener(uri,onImageAvailableListener)
       imageRetriever.retrieveFor(uri,dimens)
     }
 
@@ -38,7 +52,7 @@ class GrabImageLoader @Inject constructor(@ApplicationContext val context: Conte
   }
 
   fun getCacheFile(it: Uri): File? {
-    return GrabImageLoader.getCacheFile(it.toString(), context.cacheDir)
+    return GrabImageLoader.getDestinationCachedFile(it.toString(), context.cacheDir)
   }
 
 }

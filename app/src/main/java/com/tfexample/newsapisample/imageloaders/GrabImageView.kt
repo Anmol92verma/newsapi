@@ -2,13 +2,10 @@ package com.tfexample.newsapisample.imageloaders
 
 import android.content.Context
 import android.net.Uri
-import android.os.Build
 import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
 import android.util.Log
-import android.widget.ProgressBar
 import com.tfexample.newsapisample.injection.DaggerComponentManager
-import java.lang.ref.SoftReference
 import javax.inject.Inject
 
 class GrabImageView : AppCompatImageView, OnImageAvailableListener {
@@ -16,7 +13,6 @@ class GrabImageView : AppCompatImageView, OnImageAvailableListener {
   @Inject
   lateinit var grabImageLoader: GrabImageLoader
   private var imageUri: Uri? = null
-  private var progressBarReference: SoftReference<ProgressBar>? = null
 
   constructor(context: Context?) : super(context) {
     init()
@@ -41,8 +37,7 @@ class GrabImageView : AppCompatImageView, OnImageAvailableListener {
       uri?.let {
         this.imageUri = it
         setImageBitmap(null)
-        progressBarReference?.get()?.progress = 0
-        grabImageLoader.loadUrl(it, this,getDimens())
+        grabImageLoader.loadUrl(it, this, getDimens())
       } ?: kotlin.run {
         Log.e("GrabImagheView", "Got null image url")
       }
@@ -55,11 +50,6 @@ class GrabImageView : AppCompatImageView, OnImageAvailableListener {
       this.imageUri?.let {
         if (it.toString().equals(forUrl.toString())) {
           Log.d("prgresss", "$forUrl >> $progress")
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            progressBarReference?.get()?.setProgress(progress, true)
-          } else {
-            progressBarReference?.get()?.progress = progress
-          }
         }
       }
     }
@@ -69,7 +59,8 @@ class GrabImageView : AppCompatImageView, OnImageAvailableListener {
     post {
       this.imageUri?.let {
         if (it.toString() == forUrl.toString()) {
-          val cacheFile = GrabImageLoader.getCacheFile(forUrl.toString(), context.cacheDir)
+          val cacheFile = GrabImageLoader.getDestinationCachedFile(forUrl.toString(),
+              context.cacheDir)
           super.setImageURI(Uri.fromFile(cacheFile))
         }
       }
@@ -104,9 +95,5 @@ class GrabImageView : AppCompatImageView, OnImageAvailableListener {
         }
       }
     }
-  }
-
-  fun setProgressView(progressBar: ProgressBar) {
-    this.progressBarReference = SoftReference(progressBar)
   }
 }
