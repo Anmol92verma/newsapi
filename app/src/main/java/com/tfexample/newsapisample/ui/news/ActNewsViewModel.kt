@@ -3,6 +3,7 @@ package com.tfexample.newsapisample.ui.news
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.tfexample.newsapisample.dataproviders.NewsDataProvider
+import com.tfexample.newsapisample.imageloaders.GrabImageLoader
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,9 +17,12 @@ class ActNewsViewModel : ViewModel() {
   val newsListing: MutableLiveData<List<Article>> = MutableLiveData()
   val progressLiveData: MutableLiveData<Boolean> = MutableLiveData()
   private lateinit var newsDataProvider: NewsDataProvider
+  private lateinit var grabImageLoader: GrabImageLoader
 
-  fun setNewsDataProvider(newsApiProvider: NewsDataProvider) {
+  fun setDataProviders(newsApiProvider: NewsDataProvider,
+      grabImageLoader: GrabImageLoader) {
     this.newsDataProvider = newsApiProvider
+    this.grabImageLoader = grabImageLoader
   }
 
   fun getNewsListing() {
@@ -48,6 +52,8 @@ class ActNewsViewModel : ViewModel() {
   }
 
   override fun onCleared() {
+    //destory
+    grabImageLoader.destroyImageLoader()
     super.onCleared()
     compositeDisposable.let {
       if (!it.isDisposed) {

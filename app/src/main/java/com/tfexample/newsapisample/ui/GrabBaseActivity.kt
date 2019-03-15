@@ -8,9 +8,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.tfexample.newsapisample.injection.DaggerComponentManager
 import com.tfexample.newsapisample.injection.components.ActivityComponent
-import javax.inject.Inject
 
-abstract class BaseActivity<B : ViewDataBinding, T : ViewModel> : AppCompatActivity() {
+abstract class GrabBaseActivity<B : ViewDataBinding, T : ViewModel> : AppCompatActivity() {
   protected lateinit var binding: B
   protected lateinit var viewModel: T
 

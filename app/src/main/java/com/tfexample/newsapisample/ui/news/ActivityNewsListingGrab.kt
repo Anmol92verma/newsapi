@@ -14,15 +14,17 @@ import com.tfexample.newsapisample.GridSpacingItemDecoration
 import com.tfexample.newsapisample.R
 import com.tfexample.newsapisample.databinding.ActivityMainBinding
 import com.tfexample.newsapisample.dataproviders.NewsDataProvider
+import com.tfexample.newsapisample.imageloaders.GrabImageLoader
 import com.tfexample.newsapisample.injection.components.ActivityComponent
-import com.tfexample.newsapisample.ui.BaseActivity
+import com.tfexample.newsapisample.ui.GrabBaseActivity
 import javax.inject.Inject
 
-class ActivityNewsListing : BaseActivity<ActivityMainBinding, ActNewsViewModel>(), AdapterViewListener {
+class ActivityNewsListingGrab : GrabBaseActivity<ActivityMainBinding, ActNewsViewModel>(), AdapterViewListener {
 
   private var newsAdapter: RvAdapterNewsListing? = null
 
   @Inject lateinit var newsApiProvider: NewsDataProvider
+  @Inject lateinit var grabImageLoader: GrabImageLoader
 
   override fun getViewModelClass(): Class<ActNewsViewModel> {
     return ActNewsViewModel::class.java
@@ -35,7 +37,7 @@ class ActivityNewsListing : BaseActivity<ActivityMainBinding, ActNewsViewModel>(
   override fun onPostCreate(savedInstanceState: Bundle?) {
     super.onPostCreate(savedInstanceState)
     listenObservers()
-    viewModel.setNewsDataProvider(newsApiProvider)
+    viewModel.setDataProviders(newsApiProvider,grabImageLoader)
     viewModel.getNewsListing()
   }
 
@@ -72,7 +74,7 @@ class ActivityNewsListing : BaseActivity<ActivityMainBinding, ActNewsViewModel>(
 
   override fun navigateTo(url: String?) {
     val builder = CustomTabsIntent.Builder()
-    builder.setToolbarColor(ContextCompat.getColor(this@ActivityNewsListing,
+    builder.setToolbarColor(ContextCompat.getColor(this@ActivityNewsListingGrab,
         com.tfexample.newsapisample.R.color.colorAccent))
     builder.addDefaultShareMenuItem()
 
@@ -85,7 +87,7 @@ class ActivityNewsListing : BaseActivity<ActivityMainBinding, ActNewsViewModel>(
     val intent = anotherCustomTab.intent
     intent.data = Uri.parse(url)
 
-    val pendingIntent = PendingIntent.getActivity(this@ActivityNewsListing,
+    val pendingIntent = PendingIntent.getActivity(this@ActivityNewsListingGrab,
         requestCode,
         intent,
         PendingIntent.FLAG_UPDATE_CURRENT)
@@ -95,7 +97,7 @@ class ActivityNewsListing : BaseActivity<ActivityMainBinding, ActNewsViewModel>(
 
 
     val customTabsIntent = builder.build()
-    customTabsIntent.launchUrl(this@ActivityNewsListing, Uri.parse(url))
+    customTabsIntent.launchUrl(this@ActivityNewsListingGrab, Uri.parse(url))
   }
 
 }

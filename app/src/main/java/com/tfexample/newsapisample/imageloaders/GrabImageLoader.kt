@@ -55,4 +55,8 @@ class GrabImageLoader (@ApplicationContext val context: Context,
     return GrabImageLoader.getDestinationCachedFile(it.toString(), context.cacheDir)
   }
 
+  fun destroyImageLoader() {
+    imageRetriever.destroyRetriever()
+  }
+
 }

@@ -67,4 +67,10 @@ class ImageProcessor(@ApplicationContext private val context: Context) {
     this.dimensMap[toString] = dimens
   }
 
+  fun destroyImageProcessor() {
+    if (!compositeDisposable.isDisposed) {
+      compositeDisposable.dispose()
+    }
+  }
+
 }

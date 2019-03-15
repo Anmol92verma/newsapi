@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import java.util.concurrent.Executors
@@ -16,7 +18,7 @@ class ImageRetriever(private val downloader: BufferedImageDownloader,
 
   private val priorityList = Stack<Pair<String, Disposable?>>()
   private val queuedItems = Stack<Pair<String, Disposable?>>()
-
+  private val compositeDisposable = CompositeDisposable()
 
   fun retrieveFor(imageUri: Uri,
       dimens: Pair<Int, Int>) {
@@ -48,7 +50,7 @@ class ImageRetriever(private val downloader: BufferedImageDownloader,
     if (priorityList.size < MAX_CONCURRENT_ITEMS) {
       // and move it to priority list if priorityList size < 5
       priorityList.add(currentJobItem)
-      downloader.downloadFileByOkio(currentJobItem.first)
+      compositeDisposable += downloader.downloadFileByOkio(currentJobItem.first)
           .countedThreadScheduler(MAX_CONCURRENT_ITEMS)
           .doOnSubscribe {
             currentJobItem.second = it
@@ -125,6 +127,16 @@ class ImageRetriever(private val downloader: BufferedImageDownloader,
 
   private fun isProcessing(uri: Uri): Boolean {
     return pendingRequestsContains(uri)
+  }
+
+  fun destroyRetriever() {
+    imageProcessor.destroyImageProcessor()
+
+    compositeDisposable.let {
+      if (!it.isDisposed) {
+        it.dispose()
+      }
+    }
   }
 }
 
