@@ -10,8 +10,8 @@ import com.tfexample.newsapisample.injection.DaggerComponentManager
 import com.tfexample.newsapisample.injection.components.ActivityComponent
 
 abstract class GrabBaseActivity<B : ViewDataBinding, T : ViewModel> : AppCompatActivity() {
-  protected lateinit var binding: B
-  protected lateinit var viewModel: T
+  lateinit var binding: B
+  lateinit var viewModel: T
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

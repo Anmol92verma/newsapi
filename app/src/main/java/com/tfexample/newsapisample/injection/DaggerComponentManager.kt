@@ -1,7 +1,7 @@
 package com.tfexample.newsapisample.injection
 
 import android.support.v7.app.AppCompatActivity
-import com.tfexample.newsapisample.NewsApp
+import com.tfexample.newsapisample.GrabApp
 import com.tfexample.newsapisample.injection.components.ActivityComponent
 import com.tfexample.newsapisample.injection.components.ApplicationComponent
 import com.tfexample.newsapisample.injection.components.DaggerApplicationComponent
@@ -12,7 +12,7 @@ class DaggerComponentManager {
 
     companion object {
         var appComponent: ApplicationComponent? = null
-        fun initialize(application: NewsApp) {
+        fun initialize(application: GrabApp) {
             appComponent = DaggerApplicationComponent.builder().appModule(
                 AppModule(
                     application
