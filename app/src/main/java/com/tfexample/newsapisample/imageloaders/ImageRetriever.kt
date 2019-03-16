@@ -13,6 +13,10 @@ import java.util.concurrent.Executors
 
 private const val MAX_CONCURRENT_ITEMS = 5
 
+/**
+ * Serves the sole purpose of adding items to queue and downloads
+ * and then asks image compressor to compress the images
+ */
 class ImageRetriever(private val downloader: BufferedImageDownloader,
     private val imageProcessor: ImageProcessor) {
 

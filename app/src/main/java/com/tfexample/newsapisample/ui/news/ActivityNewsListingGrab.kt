@@ -9,22 +9,16 @@ import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
-import com.tfexample.newsapisample.AdapterViewListener
-import com.tfexample.newsapisample.GridSpacingItemDecoration
+import com.tfexample.newsapisample.ui.utils.GridSpacingItemDecoration
 import com.tfexample.newsapisample.R
 import com.tfexample.newsapisample.databinding.ActivityMainBinding
-import com.tfexample.newsapisample.dataproviders.NewsDataProvider
-import com.tfexample.newsapisample.imageloaders.GrabImageLoader
 import com.tfexample.newsapisample.injection.components.ActivityComponent
+import com.tfexample.newsapisample.networking.models.Article
 import com.tfexample.newsapisample.ui.GrabBaseActivity
-import javax.inject.Inject
 
 class ActivityNewsListingGrab : GrabBaseActivity<ActivityMainBinding, ActNewsViewModel>(), AdapterViewListener {
 
   private var newsAdapter: RvAdapterNewsListing? = null
-
-  @Inject lateinit var newsApiProvider: NewsDataProvider
-  @Inject lateinit var grabImageLoader: GrabImageLoader
 
   override fun getViewModelClass(): Class<ActNewsViewModel> {
     return ActNewsViewModel::class.java
@@ -37,7 +31,6 @@ class ActivityNewsListingGrab : GrabBaseActivity<ActivityMainBinding, ActNewsVie
   override fun onPostCreate(savedInstanceState: Bundle?) {
     super.onPostCreate(savedInstanceState)
     listenObservers()
-    viewModel.setDataProviders(newsApiProvider,grabImageLoader)
     viewModel.getNewsListing()
   }
 

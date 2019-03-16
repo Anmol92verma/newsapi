@@ -6,7 +6,10 @@ import android.webkit.URLUtil
 import com.tfexample.newsapisample.injection.ApplicationContext
 import java.io.File
 
-class GrabImageLoader (@ApplicationContext val context: Context,
+/**
+ * Communicates with the image retriever
+ */
+class GrabImageLoader(@ApplicationContext val context: Context,
     private val imageRetriever: ImageRetriever) {
 
   companion object {
@@ -15,7 +18,7 @@ class GrabImageLoader (@ApplicationContext val context: Context,
       return File(getDownloadedCached(cacheDir), fileNameWithExtension)
     }
 
-    fun getDestinationCachedFile(forUrl:String,cacheDir: File?): File {
+    fun getDestinationCachedFile(forUrl: String, cacheDir: File?): File {
       val fileNameWithExtension = URLUtil.guessFileName(forUrl, null, null)
       return File(getDestinationCached(cacheDir), fileNameWithExtension)
     }
@@ -37,8 +40,8 @@ class GrabImageLoader (@ApplicationContext val context: Context,
       onImageAvailableListener: OnImageAvailableListener,
       dimens: Pair<Int, Int>) {
     if (imageRetriever.canAddRequest(uri)) {
-      imageRetriever.addListener(uri,onImageAvailableListener)
-      imageRetriever.retrieveFor(uri,dimens)
+      imageRetriever.addListener(uri, onImageAvailableListener)
+      imageRetriever.retrieveFor(uri, dimens)
     }
 
     if (imageRetriever.hasProcessed(uri)) {

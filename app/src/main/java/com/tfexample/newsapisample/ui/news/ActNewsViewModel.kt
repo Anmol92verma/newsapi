@@ -2,31 +2,27 @@ package com.tfexample.newsapisample.ui.news
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.tfexample.newsapisample.dataproviders.NewsDataProvider
+import com.tfexample.newsapisample.data.NewsRepository
 import com.tfexample.newsapisample.imageloaders.GrabImageLoader
+import com.tfexample.newsapisample.networking.models.Article
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class ActNewsViewModel : ViewModel() {
+class ActNewsViewModel @Inject constructor(): ViewModel() {
+  @Inject lateinit var newsRepository: NewsRepository
+  @Inject lateinit var grabImageLoader: GrabImageLoader
 
   private val compositeDisposable = CompositeDisposable()
   val newsListing: MutableLiveData<List<Article>> = MutableLiveData()
   val progressLiveData: MutableLiveData<Boolean> = MutableLiveData()
-  private lateinit var newsDataProvider: NewsDataProvider
-  private lateinit var grabImageLoader: GrabImageLoader
-
-  fun setDataProviders(newsApiProvider: NewsDataProvider,
-      grabImageLoader: GrabImageLoader) {
-    this.newsDataProvider = newsApiProvider
-    this.grabImageLoader = grabImageLoader
-  }
 
   fun getNewsListing() {
-    newsDataProvider.cachedNewsListing()?.let { result ->
+    newsRepository.cachedNewsListing()?.let { result ->
       when {
         result.articles.isEmpty() -> fetchLatestNews()
         else -> result.articles.let {
@@ -39,7 +35,7 @@ class ActNewsViewModel : ViewModel() {
   }
 
   private fun fetchLatestNews() {
-    compositeDisposable += newsDataProvider.fetchNewsListing()
+    compositeDisposable += newsRepository.fetchNewsListing()
         .doOnSubscribe { progressLiveData.postValue(true) }
         .subsIoObsMain()
         .subscribe { result, error ->

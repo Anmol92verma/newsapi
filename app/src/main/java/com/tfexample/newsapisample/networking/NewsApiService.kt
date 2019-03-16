@@ -1,10 +1,10 @@
 package com.tfexample.newsapisample.networking
 
-import com.tfexample.newsapisample.API_KEY_NEWS_API
-import com.tfexample.newsapisample.COUNTRY
-import com.tfexample.newsapisample.KEY_API
-import com.tfexample.newsapisample.KEY_COUNTRY
-import com.tfexample.newsapisample.ui.news.NewsListingModel
+import com.tfexample.newsapisample.ui.utils.API_KEY_NEWS_API
+import com.tfexample.newsapisample.ui.utils.COUNTRY
+import com.tfexample.newsapisample.ui.utils.KEY_API
+import com.tfexample.newsapisample.ui.utils.KEY_COUNTRY
+import com.tfexample.newsapisample.networking.models.NewsListingModel
 import io.reactivex.Single
 import retrofit2.http.GET
 

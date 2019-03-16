@@ -2,9 +2,9 @@ package com.tfexample.newsapisample.injection.modules
 
 import android.app.Application
 import android.content.Context
-import com.tfexample.newsapisample.BASE_URL_NEWS_API
-import com.tfexample.newsapisample.dataproviders.DataPersister
-import com.tfexample.newsapisample.dataproviders.NewsDataProvider
+import com.tfexample.newsapisample.ui.utils.BASE_URL_NEWS_API
+import com.tfexample.newsapisample.data.NewsDataHelper
+import com.tfexample.newsapisample.data.NewsRepository
 import com.tfexample.newsapisample.imageloaders.BufferedImageDownloader
 import com.tfexample.newsapisample.imageloaders.GrabImageLoader
 import com.tfexample.newsapisample.imageloaders.ImageRetriever
@@ -29,8 +29,8 @@ class AppModule(private val application: Application) {
   }
 
   @Provides
-  internal fun provideDataPersister(): DataPersister {
-    return DataPersister(application)
+  internal fun provideDataPersister(): NewsDataHelper {
+    return NewsDataHelper(application)
   }
 
   @Provides
@@ -76,7 +76,7 @@ class AppModule(private val application: Application) {
 
   @Provides
   internal fun provideNewsDataProvider(apiService: NewsApiService,
-      dataPersister: DataPersister): NewsDataProvider {
-    return NewsDataProvider(apiService, dataPersister)
+      newsDataHelper: NewsDataHelper): NewsRepository {
+    return NewsRepository(apiService, newsDataHelper)
   }
 }

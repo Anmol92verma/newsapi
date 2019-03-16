@@ -2,16 +2,16 @@ package com.tfexample.newsapisample
 
 import android.app.Application
 import android.content.Context
-import com.tfexample.newsapisample.dataproviders.DataPersister
-import com.tfexample.newsapisample.dataproviders.NewsDataProvider
+import com.tfexample.newsapisample.data.NewsDataHelper
+import com.tfexample.newsapisample.data.NewsRepository
 import com.tfexample.newsapisample.imageloaders.BufferedImageDownloader
 import com.tfexample.newsapisample.imageloaders.GrabImageLoader
 import com.tfexample.newsapisample.imageloaders.ImageProcessor
 import com.tfexample.newsapisample.imageloaders.ImageRetriever
 import com.tfexample.newsapisample.injection.ApplicationContext
 import com.tfexample.newsapisample.networking.NewsApiService
-import com.tfexample.newsapisample.ui.news.Article
-import com.tfexample.newsapisample.ui.news.NewsListingModel
+import com.tfexample.newsapisample.networking.models.Article
+import com.tfexample.newsapisample.networking.models.NewsListingModel
 import dagger.Module
 import dagger.Provides
 import io.reactivex.Single
@@ -29,8 +29,8 @@ class TestAppModule(private val application: Application) {
   }
 
   @Provides
-  internal fun provideDataPersister(): DataPersister {
-    val datapersister = Mockito.mock(DataPersister::class.java)
+  internal fun provideDataPersister(): NewsDataHelper {
+    val datapersister = Mockito.mock(NewsDataHelper::class.java)
     Mockito.`when`(datapersister.getPersistedArticles()).thenReturn(Single.just(getTestNewsListingModel()))
     return datapersister
   }
@@ -75,13 +75,14 @@ class TestAppModule(private val application: Application) {
   }
 
   private fun getTestNewsListingModel(): NewsListingModel? {
-    val article = Article("author", "someContent", "desc", "39293", null, "title", "url", "urlll")
+    val article = Article("author", "someContent",
+        "desc", "39293", null, "title", "url", "urlll")
     return NewsListingModel(listOf(article), "Err", 1)
   }
 
   @Provides
   internal fun provideNewsDataProvider(apiService: NewsApiService,
-      dataPersister: DataPersister): NewsDataProvider {
-    return Mockito.mock(NewsDataProvider::class.java)
+      newsDataHelper: NewsDataHelper): NewsRepository {
+    return Mockito.mock(NewsRepository::class.java)
   }
 }

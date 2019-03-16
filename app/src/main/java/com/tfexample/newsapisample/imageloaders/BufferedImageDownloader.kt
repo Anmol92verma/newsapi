@@ -12,6 +12,9 @@ import okio.BufferedSink
 import okio.BufferedSource
 import okio.Okio
 
+/**
+ *  this class downloads from a url using okio in a buffered manner
+ */
 class BufferedImageDownloader(private val okHttpClient: OkHttpClient,
     private val context: Context) {
 

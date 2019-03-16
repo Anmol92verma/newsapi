@@ -3,8 +3,8 @@ package com.tfexample.newsapisample.ui.news
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.tfexample.newsapisample.AdapterViewListener
 import com.tfexample.newsapisample.databinding.LayoutNewsItemBinding
+import com.tfexample.newsapisample.networking.models.Article
 
 class RvAdapterNewsListing(
     private val activityNewsListing: AdapterViewListener) : RecyclerView.Adapter<RvAdapterNewsListing.NewsItemViewHolder>() {

@@ -40,6 +40,11 @@ android {
   }
 }
 
+repositories {
+  jcenter()
+  maven { url "https://jitpack.io" }
+}
+
 
 kapt {
   generateStubs = true
@@ -87,7 +92,5 @@ dependencies {
   implementation "com.android.support:customtabs:28.0.0"
 
   implementation 'id.zelory:compressor:2.1.0'
-
-  testCompile 'org.robolectric:robolectric:3.4.2'
-  testCompile 'org.mockito:mockito-core:1.10.19'
+  testImplementation 'org.mockito:mockito-core:1.10.19'
 }

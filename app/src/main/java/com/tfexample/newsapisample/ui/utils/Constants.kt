@@ -1,4 +1,4 @@
-package com.tfexample.newsapisample
+package com.tfexample.newsapisample.ui.utils
 
 const val BASE_URL_NEWS_API = "https://newsapi.org/v2/"
 const val KEY_COUNTRY = "country"

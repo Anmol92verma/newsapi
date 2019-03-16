@@ -1,4 +1,4 @@
-package com.tfexample.newsapisample;
+package com.tfexample.newsapisample.ui.utils;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
