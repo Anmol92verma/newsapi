@@ -2,7 +2,7 @@ package com.tfexample.newsapisample.injection
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.tfexample.newsapisample.ui.news.ActNewsViewModel
+import com.tfexample.newsapisample.ui.news.NewsViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -33,6 +33,6 @@ abstract class ViewModelModule {
 
   @Binds
   @IntoMap
-  @ViewModelKey(ActNewsViewModel::class)
-  internal abstract fun newsViewModel(viewModel: ActNewsViewModel): ViewModel
+  @ViewModelKey(NewsViewModel::class)
+  internal abstract fun newsViewModel(viewModel: NewsViewModel): ViewModel
 }

@@ -13,7 +13,7 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class ActNewsViewModel @Inject constructor(): ViewModel() {
+class NewsViewModel @Inject constructor(): ViewModel() {
   @Inject lateinit var newsRepository: NewsRepository
   @Inject lateinit var grabImageLoader: GrabImageLoader
 

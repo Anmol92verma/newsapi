@@ -16,12 +16,12 @@ import com.tfexample.newsapisample.injection.components.ActivityComponent
 import com.tfexample.newsapisample.networking.models.Article
 import com.tfexample.newsapisample.ui.GrabBaseActivity
 
-class ActivityNewsListingGrab : GrabBaseActivity<ActivityMainBinding, ActNewsViewModel>(), AdapterViewListener {
+class ActivityNewsListingGrab : GrabBaseActivity<ActivityMainBinding, NewsViewModel>(), AdapterViewListener {
 
   private var newsAdapter: RvAdapterNewsListing? = null
 
-  override fun getViewModelClass(): Class<ActNewsViewModel> {
-    return ActNewsViewModel::class.java
+  override fun getViewModelClass(): Class<NewsViewModel> {
+    return NewsViewModel::class.java
   }
 
   override fun getLayoutId(): Int = com.tfexample.newsapisample.R.layout.activity_main
