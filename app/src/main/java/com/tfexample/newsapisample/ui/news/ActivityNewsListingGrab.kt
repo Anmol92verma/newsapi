@@ -7,14 +7,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
-import com.tfexample.newsapisample.ui.utils.GridSpacingItemDecoration
 import com.tfexample.newsapisample.R
 import com.tfexample.newsapisample.databinding.ActivityMainBinding
 import com.tfexample.newsapisample.injection.components.ActivityComponent
 import com.tfexample.newsapisample.networking.models.Article
 import com.tfexample.newsapisample.ui.GrabBaseActivity
+import com.tfexample.newsapisample.ui.utils.GridSpacingItemDecoration
 
 class ActivityNewsListingGrab : GrabBaseActivity<ActivityMainBinding, NewsViewModel>(), AdapterViewListener {
 
@@ -54,11 +55,18 @@ class ActivityNewsListingGrab : GrabBaseActivity<ActivityMainBinding, NewsViewMo
 
   private fun updateNewsAdapter(articles: List<Article>) {
     if (newsAdapter == null) {
-      binding.rvNewsListing.layoutManager = StaggeredGridLayoutManager(2,
-          StaggeredGridLayoutManager.VERTICAL)
-      val decoration = GridSpacingItemDecoration(2,
-          resources.getDimension(R.dimen.dimen_4dp).toInt(), true, 0)
-      binding.rvNewsListing.addItemDecoration(decoration)
+      if (!resources.getBoolean(R.bool.isTablet)) {
+        binding.rvNewsListing.layoutManager = LinearLayoutManager(this)
+        val decoration = GridSpacingItemDecoration(1,
+            resources.getDimension(R.dimen.dimen_4dp).toInt(), true, 0)
+        binding.rvNewsListing.addItemDecoration(decoration)
+      } else {
+        binding.rvNewsListing.layoutManager = StaggeredGridLayoutManager(2,
+            StaggeredGridLayoutManager.VERTICAL)
+        val decoration = GridSpacingItemDecoration(2,
+            resources.getDimension(R.dimen.dimen_4dp).toInt(), true, 0)
+        binding.rvNewsListing.addItemDecoration(decoration)
+      }
       newsAdapter = RvAdapterNewsListing(this)
       binding.rvNewsListing.adapter = newsAdapter
     }
