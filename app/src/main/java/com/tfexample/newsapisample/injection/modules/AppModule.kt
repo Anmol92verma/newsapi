@@ -34,33 +34,6 @@ class AppModule(private val application: Application) {
   }
 
   @Provides
-  internal fun providesOkHttpClient(): OkHttpClient {
-    return OkHttpClient()
-  }
-
-  @Provides
-  internal fun providesBufferedImageDownloader(
-      okHttpClient: OkHttpClient): BufferedImageDownloader {
-    return BufferedImageDownloader(okHttpClient, application)
-  }
-
-  @Provides
-  internal fun provideImageRetriever(downloader: BufferedImageDownloader,
-      imageProcessor: ImageProcessor): ImageRetriever {
-    return ImageRetriever(downloader, imageProcessor)
-  }
-
-  @Provides
-  internal fun providesImageProvider(): ImageProcessor {
-    return ImageProcessor(application)
-  }
-
-  @Provides
-  internal fun providesGrabImageLoader(imageRetriever: ImageRetriever): GrabImageLoader {
-    return GrabImageLoader(application, imageRetriever)
-  }
-
-  @Provides
   internal fun providesRetrofit(): Retrofit {
     return Retrofit.Builder()
         .baseUrl(BASE_URL_NEWS_API)

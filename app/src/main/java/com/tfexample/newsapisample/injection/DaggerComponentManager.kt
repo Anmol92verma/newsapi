@@ -7,17 +7,17 @@ import com.tfexample.newsapisample.injection.components.ApplicationComponent
 import com.tfexample.newsapisample.injection.components.DaggerApplicationComponent
 import com.tfexample.newsapisample.injection.modules.ActivityModule
 import com.tfexample.newsapisample.injection.modules.AppModule
+import com.tfexample.newsapisample.injection.modules.ImageLoaderModule
 
 class DaggerComponentManager {
 
     companion object {
         var appComponent: ApplicationComponent? = null
         fun initialize(application: GrabApp) {
-            appComponent = DaggerApplicationComponent.builder().appModule(
-                AppModule(
-                    application
-                )
-            ).build()
+            appComponent = DaggerApplicationComponent.builder()
+                .appModule(AppModule(application))
+                .imageLoaderModule(ImageLoaderModule(application))
+                .build()
         }
 
         fun getActivityComponent(activity: AppCompatActivity): ActivityComponent {
