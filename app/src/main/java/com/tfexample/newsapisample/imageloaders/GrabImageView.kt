@@ -34,9 +34,9 @@ class GrabImageView : AppCompatImageView, OnImageAvailableListener {
   override fun setImageURI(uri: Uri?) {
     // in case recyclerview is reusing the view
     post {
+      setImageBitmap(null)
       uri?.let {
         this.imageUri = it
-        setImageBitmap(null)
         grabImageLoader.loadUrl(it, this, getDimens())
       } ?: kotlin.run {
         Log.e("GrabImagheView", "Got null image url")
@@ -70,13 +70,6 @@ class GrabImageView : AppCompatImageView, OnImageAvailableListener {
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
     grabImageLoader.removeRequest(this.imageUri)
-  }
-
-  override fun onAttachedToWindow() {
-    super.onAttachedToWindow()
-    imageUri?.let {
-      setImageURI(it)
-    }
   }
 
   override fun getDimens(): Pair<Int, Int> {
