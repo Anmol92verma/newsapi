@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d6f27b3aa316eee6c8d12ace2a2723f8",
+    "identityHash": "b2ed3b234e863fe21070ac93bc9dea9c",
     "entities": [
       {
         "tableName": "ARTICLES_TABLE",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`author` TEXT, `content` TEXT, `description` TEXT, `publishedAt` TEXT NOT NULL, `source` TEXT, `title` TEXT, `url` TEXT, `urlToImage` TEXT, PRIMARY KEY(`publishedAt`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`author` TEXT, `content` TEXT, `description` TEXT, `publishedAt` TEXT NOT NULL, `source` TEXT, `title` TEXT, `url` TEXT, `urlToImage` TEXT, `isFav` INTEGER NOT NULL, PRIMARY KEY(`publishedAt`))",
         "fields": [
           {
             "fieldPath": "author",
@@ -55,6 +55,12 @@
             "columnName": "urlToImage",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "isFav",
+            "columnName": "isFav",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -65,11 +71,37 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "SOURCES_TABLE",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT, `name` TEXT NOT NULL, PRIMARY KEY(`name`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "name"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d6f27b3aa316eee6c8d12ace2a2723f8\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b2ed3b234e863fe21070ac93bc9dea9c\")"
     ]
   }
 }

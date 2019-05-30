@@ -7,13 +7,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
+import android.support.v4.util.ArrayMap
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import com.tfexample.newsapisample.R
 import com.tfexample.newsapisample.databinding.ActivityMainBinding
 import com.tfexample.newsapisample.injection.components.ActivityComponent
-import com.tfexample.newsapisample.networking.models.Article
+import com.tfexample.newsapisample.networking.models.DBArticle
+import com.tfexample.newsapisample.networking.models.Source
 import com.tfexample.newsapisample.ui.GrabBaseActivity
 import com.tfexample.newsapisample.ui.utils.GridSpacingItemDecoration
 
@@ -25,7 +27,7 @@ class ActivityNewsListingGrab : GrabBaseActivity<ActivityMainBinding, NewsViewMo
     return NewsViewModel::class.java
   }
 
-  override fun getLayoutId(): Int = com.tfexample.newsapisample.R.layout.activity_main
+  override fun getLayoutId(): Int = R.layout.activity_main
 
   override fun onComponentCreated(component: ActivityComponent) = component.inject(this)
 
@@ -53,7 +55,8 @@ class ActivityNewsListingGrab : GrabBaseActivity<ActivityMainBinding, NewsViewMo
   }
 
 
-  private fun updateNewsAdapter(articles: List<Article>) {
+  private fun updateNewsAdapter(
+      articles: ArrayMap<Source, List<DBArticle>>) {
     if (newsAdapter == null) {
       if (!resources.getBoolean(R.bool.isTablet)) {
         binding.rvNewsListing.layoutManager = LinearLayoutManager(this)
@@ -71,6 +74,10 @@ class ActivityNewsListingGrab : GrabBaseActivity<ActivityMainBinding, NewsViewMo
       binding.rvNewsListing.adapter = newsAdapter
     }
     newsAdapter?.updateArticles(articles)
+  }
+
+  override fun switchFav(dbArticle: DBArticle) {
+    viewModel.switchFav(dbArticle)
   }
 
   override fun navigateTo(url: String?) {
