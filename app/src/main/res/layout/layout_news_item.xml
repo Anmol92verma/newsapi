@@ -42,6 +42,7 @@
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="parent"
           app:layout_constraintTop_toTopOf="parent"
+          android:textStyle="bold"
           tools:text="A Boeing 737 Max 8 crashed in Ethiopia killing everyone on board. The crash of the Ethiopian Airlines plane marks the second deadliest accident involving a Boeing 737 in the past five months. So is there a problem with this particular model? USA TODAY The Uni… [+4731 chars]"
           />
 
@@ -55,7 +56,7 @@
           android:padding="@dimen/dimen_4dp"
           android:text="@{item.source}"
           android:textColor="@color/colorAccent"
-          android:textSize="@dimen/text_size_18sp"
+          android:textSize="@dimen/text_size_14sp"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/tvComment"
           tools:text="USA Today"
