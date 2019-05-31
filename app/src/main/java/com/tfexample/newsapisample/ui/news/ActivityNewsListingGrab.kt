@@ -11,7 +11,9 @@ import android.support.v4.util.ArrayMap
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
+import android.widget.Toast
 import com.tfexample.newsapisample.R
+import com.tfexample.newsapisample.WaterProblem
 import com.tfexample.newsapisample.databinding.ActivityMainBinding
 import com.tfexample.newsapisample.injection.components.ActivityComponent
 import com.tfexample.newsapisample.networking.models.DBArticle
@@ -35,6 +37,8 @@ class ActivityNewsListingGrab : GrabBaseActivity<ActivityMainBinding, NewsViewMo
     super.onPostCreate(savedInstanceState)
     listenObservers()
     viewModel.getNewsListing()
+    val totalcans = WaterProblem.minCan(intArrayOf(3, 1, 2), intArrayOf(6, 5, 4))
+    Toast.makeText(this@ActivityNewsListingGrab, "Total cans $totalcans", Toast.LENGTH_LONG).show()
   }
 
   private fun listenObservers() {
